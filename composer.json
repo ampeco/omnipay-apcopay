@@ -1,0 +1,30 @@
+{
+    "name": "ampeco/omnipay-apcopay",
+    "description": "Omnipay plugin for Apcopay",
+    "type": "library",
+    "require": {
+        "omnipay/common": "^3.2",
+        "php": "^8.1",
+        "nyholm/psr7": "^1.0",
+        "ext-dom": "*",
+        "ext-simplexml": "*",
+        "ext-curl": "*"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Ampeco\\OmnipayApcopay\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Doncho Toromanov",
+            "email": "doncho.toromanov@ampeco.global"
+        }
+    ],
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    }
+}
