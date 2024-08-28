@@ -78,16 +78,16 @@ class ApcopayNotification implements NotificationInterface, ResponseInterface
         return $this->data['ExtendedData']['CardExpiry'] ?? null;
     }
 
-    public function getExpirationYear(): ?string
+    public function getExpirationYear(): ?int
     {
         if ($this->getExpirationDate() !== null) {
-            return substr($this->getExpirationDate(), 3, 4);
+            return (int)substr($this->getExpirationDate(), 3, 4);
         }
 
         return null;
     }
 
-    public function getExpirationMonth(): ?string
+    public function getExpirationMonth(): ?int
     {
         if ($this->getExpirationDate() !== null) {
             return (int)substr($this->getExpirationDate(), 0, 2);
