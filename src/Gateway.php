@@ -3,13 +3,20 @@
 namespace Ampeco\OmnipayApcopay;
 
 use Ampeco\OmnipayApcopay\Message\CheckoutPageRequest;
+use Ampeco\OmnipayApcopay\Message\GetTransactionRequest;
 use Ampeco\OmnipayApcopay\Message\Request;
 use Ampeco\OmnipayApcopay\Message\ApcopayNotification;
+use Ampeco\OmnipayPayze\Message\Response;
 use Omnipay\Common\AbstractGateway;
 use Omnipay\Common\Message\RequestInterface;
 
 class Gateway extends AbstractGateway
 {
+    private const STATUS_APPROVED = 'APPROVED';
+    private const STATUS_CAPTURED = 'CAPTURED';
+    private const STATUS_VOIDED = 'VOIDED';
+    private const STATUS_DECLINED = 'DECLINED';
+
     public function getName(): string
     {
         return 'Apcopay';
@@ -48,6 +55,31 @@ class Gateway extends AbstractGateway
     public function initial(array $options = array()): RequestInterface
     {
         return $this->createRequest(Request::class, $options);
+    }
+
+    public function getTransaction(array $options = array()): RequestInterface
+    {
+        return $this->createRequest(GetTransactionRequest::class, $options);
+    }
+
+    public function getCapturedTransactionStatus(): string
+    {
+        return self::STATUS_CAPTURED;
+    }
+
+    public function getAuthTransactionStatus(): string
+    {
+        return self::STATUS_APPROVED;
+    }
+
+    public function getVoidedTransactionStatus(): string
+    {
+        return self::STATUS_VOIDED;
+    }
+
+    public function getDeclinedTransactionStatus(): string
+    {
+        return self::STATUS_DECLINED;
     }
 
     public function getAvailableCurrencies(): array

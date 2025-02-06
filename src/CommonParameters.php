@@ -133,4 +133,14 @@ trait CommonParameters
     {
         return $this->getParameter('baseUrlParam');
     }
+
+    public function setTrnType(string $value): void
+    {
+        $this->setParameter('trnType', $value);
+    }
+
+    public function getTrnType(): string
+    {
+        return $this->getParameter('trnType');
+    }
 }
