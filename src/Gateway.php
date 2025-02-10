@@ -12,11 +12,6 @@ use Omnipay\Common\Message\RequestInterface;
 
 class Gateway extends AbstractGateway
 {
-    private const STATUS_APPROVED = 'APPROVED';
-    private const STATUS_CAPTURED = 'CAPTURED';
-    private const STATUS_VOIDED = 'VOIDED';
-    private const STATUS_DECLINED = 'DECLINED';
-
     public function getName(): string
     {
         return 'Apcopay';
@@ -64,22 +59,22 @@ class Gateway extends AbstractGateway
 
     public function getCapturedTransactionStatus(): string
     {
-        return self::STATUS_CAPTURED;
+        return TransactionStatusService::STATUS_CAPTURED;
     }
 
     public function getAuthTransactionStatus(): string
     {
-        return self::STATUS_APPROVED;
+        return TransactionStatusService::STATUS_APPROVED;
     }
 
     public function getVoidedTransactionStatus(): string
     {
-        return self::STATUS_VOIDED;
+        return TransactionStatusService::STATUS_VOIDED;
     }
 
     public function getDeclinedTransactionStatus(): string
     {
-        return self::STATUS_DECLINED;
+        return TransactionStatusService::STATUS_DECLINED;
     }
 
     public function getAvailableCurrencies(): array

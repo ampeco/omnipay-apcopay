@@ -4,6 +4,7 @@ namespace Ampeco\OmnipayApcopay\Message;
 
 use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Common\Message\RequestInterface;
+use Ampeco\OmnipayApcopay\TransactionStatusService;
 
 class GetTransactionResponse extends AbstractResponse
 {
@@ -44,7 +45,10 @@ class GetTransactionResponse extends AbstractResponse
         }
 
         foreach ($this->data['Transactions'] as $transaction) {
-            if (isset($transaction['TrnType']) && $transaction['TrnType'] === $this->trnType
+            $transactionTypeMatches = isset($transaction['TrnType']) && $transaction['TrnType'] === $this->trnType;
+            $bankResponseMatches = isset($transaction['BankResponse'])
+                && TransactionStatusService::getExpectedTransactionStatus($this->trnType) === $transaction['BankResponse'];
+            if (($transactionTypeMatches || $bankResponseMatches)
                 && isset($transaction['BankAccept']) && $transaction['BankAccept'] === self::BANK_ACCEPT_YES
             ) {
                 $this->transactionStatus = $transaction['BankResponse'] ?? null;
