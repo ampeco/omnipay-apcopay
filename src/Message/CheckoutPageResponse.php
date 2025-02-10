@@ -15,7 +15,8 @@ class CheckoutPageResponse extends AbstractResponse implements RedirectResponseI
 
     public function isSuccessful() : bool
     {
-        return $this->code == 302;
+        //transaction status is checked with consecutive request
+        return true;
     }
 
     public function isRedirect(): bool
