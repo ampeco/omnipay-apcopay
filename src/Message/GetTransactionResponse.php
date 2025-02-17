@@ -13,11 +13,13 @@ class GetTransactionResponse extends AbstractResponse
 
     private ?string $transactionStatus;
     private ?string $transactionReference;
+    private bool $acceptedByBank;
 
     public function __construct(RequestInterface $request, array $data, private int $code, private string $trnType)
     {
         $this->transactionStatus = null;
         $this->transactionReference = null;
+        $this->acceptedByBank = false;
 
         parent::__construct($request, $data);
         $this->setTransactionData();
@@ -38,6 +40,11 @@ class GetTransactionResponse extends AbstractResponse
         return $this->transactionReference;
     }
 
+    public function isAcceptedByBank(): bool
+    {
+        return $this->acceptedByBank;
+    }
+
     private function setTransactionData(): void
     {
         if (!isset($this->data['Transactions']) || !is_array($this->data['Transactions'])) {
@@ -48,11 +55,10 @@ class GetTransactionResponse extends AbstractResponse
             $transactionTypeMatches = isset($transaction['TrnType']) && $transaction['TrnType'] === $this->trnType;
             $bankResponseMatches = isset($transaction['BankResponse'])
                 && TransactionStatusService::getExpectedTransactionStatus($this->trnType) === $transaction['BankResponse'];
-            if (($transactionTypeMatches || $bankResponseMatches)
-                && isset($transaction['BankAccept']) && $transaction['BankAccept'] === self::BANK_ACCEPT_YES
-            ) {
+            if ($transactionTypeMatches || $bankResponseMatches) {
                 $this->transactionStatus = $transaction['BankResponse'] ?? null;
                 $this->transactionReference = $transaction['PSPID'] ?? null;
+                $this->acceptedByBank = isset($transaction['BankAccept']) ? $transaction['BankAccept'] === self::BANK_ACCEPT_YES : false;
             }
         }
     }
